@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'JCCollectionViewWaterfallLayout_Example', :exclusive => true do
+  pod "JCCollectionViewWaterfallLayout", :path => "../"
+end
+
+target 'JCCollectionViewWaterfallLayout_Tests', :exclusive => true do
+  pod "JCCollectionViewWaterfallLayout", :path => "../"
+
+  
+end
