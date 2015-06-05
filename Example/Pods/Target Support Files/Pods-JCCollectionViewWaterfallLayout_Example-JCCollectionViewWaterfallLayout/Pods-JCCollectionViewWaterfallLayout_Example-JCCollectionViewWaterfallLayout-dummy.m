@@ -1,0 +1,5 @@
+#import <Foundation/Foundation.h>
+@interface PodsDummy_Pods_JCCollectionViewWaterfallLayout_Example_JCCollectionViewWaterfallLayout : NSObject
+@end
+@implementation PodsDummy_Pods_JCCollectionViewWaterfallLayout_Example_JCCollectionViewWaterfallLayout
+@end

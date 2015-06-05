@@ -5,25 +5,22 @@
 [![License](https://img.shields.io/cocoapods/l/JCCollectionViewWaterfallLayout.svg?style=flat)](http://cocoapods.org/pods/JCCollectionViewWaterfallLayout)
 [![Platform](https://img.shields.io/cocoapods/p/JCCollectionViewWaterfallLayout.svg?style=flat)](http://cocoapods.org/pods/JCCollectionViewWaterfallLayout)
 
-## Usage
+xxx.
 
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
+<img width="320" src="./ScreenShot.png"> 
 
 ## Installation
 
-JCCollectionViewWaterfallLayout is available through [CocoaPods](http://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
 pod "JCCollectionViewWaterfallLayout"
-```
+
+## Usage
+
+Refer to demo
 
 ## Author
 
-lijingcheng, bj_lijingcheng@163.com
+[李京城](http://lijingcheng.github.io)
 
 ## License
 
-JCCollectionViewWaterfallLayout is available under the MIT license. See the LICENSE file for more info.
+MIT

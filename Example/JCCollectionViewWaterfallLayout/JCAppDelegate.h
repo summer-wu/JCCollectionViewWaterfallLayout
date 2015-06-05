@@ -2,7 +2,7 @@
 //  JCAppDelegate.h
 //  JCCollectionViewWaterfallLayout
 //
-//  Created by CocoaPods on 06/04/2015.
+//  Created by lijingcheng on 06/04/2015.
 //  Copyright (c) 2014 lijingcheng. All rights reserved.
 //
 
