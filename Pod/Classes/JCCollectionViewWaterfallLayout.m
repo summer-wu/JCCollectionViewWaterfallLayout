@@ -74,6 +74,7 @@
     [self.allItemAttributes removeAllObjects];
     [self.supplementaryAttributes removeAllObjects];
     [self.columnHeights removeAllObjects];
+    [self.allItemSize removeAllObjects];
     
     NSInteger numberOfSections = [self.collectionView numberOfSections];
     
@@ -84,28 +85,6 @@
             [sectionColumnHeights addObject:@(0)];
         }
         [self.columnHeights addObject:sectionColumnHeights];
-    }
-    
-    for (NSInteger section = 0; section < numberOfSections; section++) {
-        NSInteger columnCount = [self columnCountForSection:section];
-        CGFloat minimumInteritemSpacing = [self minimumInteritemSpacingForSection:section];
-        UIEdgeInsets sectionInset = [self sectionInsetForSection:section];
-        
-        CGFloat itemWidth = floorf(([UIScreen mainScreen].bounds.size.width-sectionInset.left-sectionInset.right-(columnCount-1)*minimumInteritemSpacing)/columnCount);
-        
-        NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
-        
-        if (self.allItemSize.count != itemCount) {
-            [self.allItemSize removeAllObjects];
-            
-            for (NSInteger row = 0; row < itemCount; row++) {
-                CGSize itemSize = [self itemSizeForIndexPath:[NSIndexPath indexPathForItem:row inSection:section]];
-                
-                //                NSLog(@"%@",NSStringFromCGSize(itemSize));
-                
-                [self.allItemSize addObject:NSStringFromCGSize(CGSizeMake(itemWidth, itemSize.height))];
-            }
-        }
     }
     
     CGFloat top = 0;
@@ -147,12 +126,13 @@
             CGFloat offsetX = sectionInset.left + (itemWidth + minimumInteritemSpacing) * columnIndex;
             CGFloat offsetY = [self.columnHeights[section][columnIndex] floatValue];
             
-            CGSize itemSize = CGSizeFromString(self.allItemSize[i]);
+            CGSize itemSize = [self itemSizeForIndexPath:[NSIndexPath indexPathForItem:i inSection:section]];
             
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
             attributes.frame = CGRectMake(offsetX, offsetY, itemSize.width, itemSize.height);
             
             [self.allItemAttributes addObject:attributes];
+            [self.allItemSize addObject:NSStringFromCGSize(itemSize)];
             self.columnHeights[section][columnIndex] = @(CGRectGetMaxY(attributes.frame) + minimumLineSpacing);
         }
         
@@ -203,7 +183,7 @@
 //返回对应于indexPath的位置的cell的布局属性
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSInteger index = indexPath.row;
+    NSInteger index = indexPath.item;
     
     for (NSInteger section = 0; section < indexPath.section; section++) {
         index += [self.collectionView numberOfItemsInSection:section];
