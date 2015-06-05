@@ -12,10 +12,8 @@
 
 @property (nonatomic, weak) id<JCCollectionViewWaterfallLayoutDelegate> delegate;
 
-@property (nonatomic, strong) NSMutableArray *allItemSize;
-@property (nonatomic, strong) NSMutableArray *columnHeights;
+@property (nonatomic, strong) NSMutableArray *itemAttributes;
 @property (nonatomic, strong) NSMutableArray *supplementaryAttributes;
-@property (nonatomic, strong) NSMutableArray *allItemAttributes;
 
 @property (nonatomic, assign) CGFloat contentHeight;
 
@@ -54,10 +52,8 @@
     self.columnCount = 2;
     self.headerHeight = 0.0f;
     self.footerHeight = 0.0f;
-    self.allItemSize = [[NSMutableArray alloc] initWithCapacity:10];
-    self.allItemAttributes = [[NSMutableArray alloc] initWithCapacity:10];
+    self.itemAttributes = [[NSMutableArray alloc] initWithCapacity:10];
     self.supplementaryAttributes = [[NSMutableArray alloc] initWithCapacity:10];
-    self.columnHeights = [[NSMutableArray alloc] initWithCapacity:10];
     
     CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width-self.sectionInset.left-self.sectionInset.right-(self.columnCount-1)*self.minimumInteritemSpacing)/self.columnCount;
     
@@ -65,32 +61,18 @@
 }
 
 #pragma mark -
-//- (void)prepareForCollectionViewUpdates:(NSArray *)updateItems;
-//1、设定一些必要的layout的结构和初始需要的参数
+
+//设置一些必要的layout的结构和初始需要的参数
 - (void)prepareLayout
 {
-    [super prepareLayout];
-    
     self.delegate = (id<JCCollectionViewWaterfallLayoutDelegate>)self.collectionView.delegate;
     
     self.contentHeight = 0;
-    
-    [self.allItemAttributes removeAllObjects];
+    [self.itemAttributes removeAllObjects];
     [self.supplementaryAttributes removeAllObjects];
-    [self.columnHeights removeAllObjects];
-    [self.allItemSize removeAllObjects];
     
     NSInteger numberOfSections = [self.collectionView numberOfSections];
-    
-    for (NSInteger section = 0; section < numberOfSections; section++) {
-        NSInteger columnCount = [self columnCountForSection:section];
-        NSMutableArray *sectionColumnHeights = [NSMutableArray arrayWithCapacity:columnCount];
-        for (NSInteger idx = 0; idx < columnCount; idx++) {
-            [sectionColumnHeights addObject:@(0)];
-        }
-        [self.columnHeights addObject:sectionColumnHeights];
-    }
-    
+
     for (NSInteger section = 0; section < numberOfSections; section++) {
         CGFloat minimumInteritemSpacing = [self minimumInteritemSpacingForSection:section];
         CGFloat minimumLineSpacing = [self minimumLineSpacingForSection:section];
@@ -101,52 +83,52 @@
         
         NSMutableDictionary *supplementary = [[NSMutableDictionary alloc] initWithCapacity:2];
         
+        self.contentHeight += sectionInset.top;
+        
         //header
         if (headerHeight > 0) {
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]];
             attributes.frame = CGRectMake(0, self.contentHeight, self.collectionView.frame.size.width, headerHeight);
             
-            [self.allItemAttributes addObject:attributes];
+            [self.itemAttributes addObject:attributes];
             [supplementary setObject:attributes forKey:UICollectionElementKindSectionHeader];
             
             self.contentHeight = CGRectGetMaxY(attributes.frame);
         }
         
-        self.contentHeight += sectionInset.top;
-        for (NSInteger idx = 0; idx < columnCount; idx++) {
-            self.columnHeights[section][idx] = @(self.contentHeight);
-        }
+        NSMutableArray *columnHeights = [[NSMutableArray alloc] initWithCapacity:columnCount];
         
+        for (NSInteger i = 0; i < columnCount; i++) {
+            columnHeights[i] = @(self.contentHeight);
+        }
+
         //item
         NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
-        CGFloat itemWidth = floorf(([UIScreen mainScreen].bounds.size.width-sectionInset.left-sectionInset.right-(columnCount-1)*minimumInteritemSpacing)/columnCount);
-        
+
         for (NSInteger i = 0; i < itemCount; i++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:section];
-            NSUInteger columnIndex = i % columnCount;
             
-            CGFloat offsetX = sectionInset.left + (itemWidth + minimumInteritemSpacing) * columnIndex;
-            CGFloat offsetY = [self.columnHeights[section][columnIndex] floatValue];
+            NSInteger columnIndex = [columnHeights indexOfObject:[columnHeights valueForKeyPath:@"@min.self"]];
             
-            CGSize itemSize = [self itemSizeForIndexPath:[NSIndexPath indexPathForItem:i inSection:section]];
+            CGSize size = [self itemSizeForIndexPath:indexPath];
+            CGFloat x = sectionInset.left + (size.width + minimumInteritemSpacing) * columnIndex;
             
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-            attributes.frame = CGRectMake(offsetX, offsetY, itemSize.width, itemSize.height);
+            attributes.frame = CGRectMake(x, [columnHeights[columnIndex] floatValue], size.width, size.height);
             
-            [self.allItemAttributes addObject:attributes];
-            [self.allItemSize addObject:NSStringFromCGSize(itemSize)];
-            self.columnHeights[section][columnIndex] = @(CGRectGetMaxY(attributes.frame) + minimumLineSpacing);
+            [self.itemAttributes addObject:attributes];
+           
+            columnHeights[columnIndex] = @(CGRectGetMaxY(attributes.frame) + minimumLineSpacing);
         }
         
-        //footer
-        NSUInteger columnIndex = [self longestColumnIndexInSection:section];
-        self.contentHeight = [self.columnHeights[section][columnIndex] floatValue] - self.minimumInteritemSpacing + self.sectionInset.bottom;
+        self.contentHeight = [[columnHeights valueForKeyPath:@"@max.self"] floatValue];
         
+        //footer
         if (footerHeight > 0) {
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter withIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]];
             attributes.frame = CGRectMake(0, self.contentHeight, self.collectionView.frame.size.width, footerHeight);
             
-            [self.allItemAttributes addObject:attributes];
+            [self.itemAttributes addObject:attributes];
             [supplementary setObject:attributes forKey:UICollectionElementKindSectionFooter];
             
             self.contentHeight = CGRectGetMaxY(attributes.frame);
@@ -154,24 +136,20 @@
         
         [self.supplementaryAttributes addObject:supplementary];
         
-        for (NSInteger idx = 0; idx < columnCount; idx++) {
-            self.columnHeights[section][idx] = @(self.contentHeight);
-        }
-        
-        NSLog(@"%f,%f", [self.columnHeights[section][(columnCount-1)] floatValue],self.contentHeight);
+        self.contentHeight += sectionInset.bottom;
     }
 }
 
-//2、设定collectionView的contentsize
+//设置collectionView的contentsize
 - (CGSize)collectionViewContentSize
 {
     return CGSizeMake(self.collectionView.frame.size.width, self.contentHeight);
 }
 
-//3、返回rect中的所有的元素的布局属性
+//返回指定rect中的所有的元素的布局属性
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-    return [self.allItemAttributes filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *evaluatedObject, NSDictionary *bindings) {
+    return [self.itemAttributes filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *evaluatedObject, NSDictionary *bindings) {
         return CGRectIntersectsRect(rect, evaluatedObject.frame);
     }]];
 }
@@ -185,7 +163,7 @@
         index += [self.collectionView numberOfItemsInSection:section];
     }
     
-    return self.allItemAttributes[index];
+    return self.itemAttributes[index];
 }
 
 //返回对应于indexPath的位置的追加视图的布局属性
@@ -194,7 +172,7 @@
     return self.supplementaryAttributes[indexPath.section][kind];
 }
 
-//当边界发生改变时，是否应该刷新布局。如果YES则在边界变化（一般是scroll到其他地方）时，将重新计算需要的布局信息。
+//当边界发生改变时，是否重新计算需要的布局信息。
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
     CGRect oldBounds = self.collectionView.bounds;
@@ -204,39 +182,6 @@
     }
     
     return NO;
-}
-
-#pragma mark -
-
-//- (CGSize)updateItemSize:(CGSize)newSize at:(NSIndexPath *)indexPath
-//{
-//    NSInteger index = indexPath.row;
-//    
-//    for (NSInteger section = 0; section < indexPath.section; section++) {
-//        index += [self.collectionView numberOfItemsInSection:section];
-//    }
-//    
-//    CGSize itemSize = CGSizeMake(self.itemSize.width, floorf(newSize.height * self.itemSize.width / newSize.width));
-//    
-//    [self.allItemSize replaceObjectAtIndex:index withObject:NSStringFromCGSize(itemSize)];
-//    
-//    return itemSize;
-//}
-
-- (NSUInteger)longestColumnIndexInSection:(NSInteger)section
-{
-    __block NSUInteger index = 0;
-    __block CGFloat longestHeight = 0;
-    
-    [self.columnHeights[section] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        CGFloat height = [obj floatValue];
-        if (height > longestHeight) {
-            longestHeight = height;
-            index = idx;
-        }
-    }];
-    
-    return index;
 }
 
 #pragma mark -

@@ -37,18 +37,6 @@ static NSString * const reuseCellId = @"cellId";
     self.activityView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityView];
     
-    self.collectionView.backgroundColor = [UIColor yellowColor];
-
-//    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-//    flowLayout.sectionInset = UIEdgeInsetsMake(5, 5, 5, 5);
-////    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-//    flowLayout.minimumLineSpacing = 5;
-//    flowLayout.minimumInteritemSpacing = 5;
-//    flowLayout.itemSize = CGSizeMake(152.5, 100);
-//    self.collectionView.collectionViewLayout = flowLayout;
-    
-    
-    
     self.layout = (JCCollectionViewWaterfallLayout *)self.collectionView.collectionViewLayout;
     self.layout.headerHeight = 30.0f;
     self.layout.footerHeight = 30.0f;
@@ -62,7 +50,7 @@ static NSString * const reuseCellId = @"cellId";
 {
     [self.activityView startAnimating];
     
-    NSString *url = [@"http://image.haosou.com/j?q=apple&pn=20" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *url = [@"http://image.haosou.com/j?q=banana&pn=20" stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -89,7 +77,7 @@ static NSString * const reuseCellId = @"cellId";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -101,12 +89,14 @@ static NSString * const reuseCellId = @"cellId";
 {
     if([kind isEqual:UICollectionElementKindSectionHeader]){
         JCCollectionHeaderView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseHeaderId forIndexPath:indexPath];
+        headerView.titleLabel.text = @"===== header =====";
         
         return headerView;
     }
     else {
         JCCollectionFooterView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseFooterId forIndexPath:indexPath];
-
+        footerView.titleLabel.text = @"===== footer =====";
+        
         return footerView;
     }
 }
@@ -124,11 +114,6 @@ static NSString * const reuseCellId = @"cellId";
     [cell.imageView setImageWithURL:[NSURL URLWithString:self.pictures[indexPath.row][@"img"]]];
     
     return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"%ld", (long)indexPath.item);
 }
 
 @end

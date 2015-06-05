@@ -21,6 +21,4 @@
 @property (nonatomic, assign) CGFloat headerHeight; // default 0
 @property (nonatomic, assign) CGFloat footerHeight; // default 0
 
-//- (CGSize)updateItemSize:(CGSize)size at:(NSIndexPath *)indexPath;
-
 @end

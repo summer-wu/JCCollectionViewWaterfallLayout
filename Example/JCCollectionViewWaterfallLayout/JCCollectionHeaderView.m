@@ -12,7 +12,7 @@
 
 - (void)awakeFromNib
 {
-
+    
 }
 
 - (void)prepareForReuse
