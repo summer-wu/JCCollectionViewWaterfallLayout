@@ -17,6 +17,8 @@
 @property (nonatomic, strong) NSMutableArray *supplementaryAttributes;
 @property (nonatomic, strong) NSMutableArray *allItemAttributes;
 
+@property (nonatomic, assign) CGFloat contentHeight;
+
 @end
 
 @implementation JCCollectionViewWaterfallLayout
@@ -71,6 +73,8 @@
     
     self.delegate = (id<JCCollectionViewWaterfallLayoutDelegate>)self.collectionView.delegate;
     
+    self.contentHeight = 0;
+    
     [self.allItemAttributes removeAllObjects];
     [self.supplementaryAttributes removeAllObjects];
     [self.columnHeights removeAllObjects];
@@ -87,8 +91,6 @@
         [self.columnHeights addObject:sectionColumnHeights];
     }
     
-    CGFloat top = 0;
-    
     for (NSInteger section = 0; section < numberOfSections; section++) {
         CGFloat minimumInteritemSpacing = [self minimumInteritemSpacingForSection:section];
         CGFloat minimumLineSpacing = [self minimumLineSpacingForSection:section];
@@ -102,17 +104,17 @@
         //header
         if (headerHeight > 0) {
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader withIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]];
-            attributes.frame = CGRectMake(0, top, self.collectionView.frame.size.width, headerHeight);
+            attributes.frame = CGRectMake(0, self.contentHeight, self.collectionView.frame.size.width, headerHeight);
             
             [self.allItemAttributes addObject:attributes];
             [supplementary setObject:attributes forKey:UICollectionElementKindSectionHeader];
             
-            top = CGRectGetMaxY(attributes.frame);
+            self.contentHeight = CGRectGetMaxY(attributes.frame);
         }
         
-        top += sectionInset.top;
+        self.contentHeight += sectionInset.top;
         for (NSInteger idx = 0; idx < columnCount; idx++) {
-            self.columnHeights[section][idx] = @(top);
+            self.columnHeights[section][idx] = @(self.contentHeight);
         }
         
         //item
@@ -138,38 +140,32 @@
         
         //footer
         NSUInteger columnIndex = [self longestColumnIndexInSection:section];
-        top = [self.columnHeights[section][columnIndex] floatValue] - self.minimumInteritemSpacing + self.sectionInset.bottom;
+        self.contentHeight = [self.columnHeights[section][columnIndex] floatValue] - self.minimumInteritemSpacing + self.sectionInset.bottom;
         
         if (footerHeight > 0) {
             UICollectionViewLayoutAttributes *attributes = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter withIndexPath:[NSIndexPath indexPathForItem:0 inSection:section]];
-            attributes.frame = CGRectMake(0, top, self.collectionView.frame.size.width, footerHeight);
+            attributes.frame = CGRectMake(0, self.contentHeight, self.collectionView.frame.size.width, footerHeight);
             
             [self.allItemAttributes addObject:attributes];
             [supplementary setObject:attributes forKey:UICollectionElementKindSectionFooter];
             
-            top = CGRectGetMaxY(attributes.frame);
+            self.contentHeight = CGRectGetMaxY(attributes.frame);
         }
         
         [self.supplementaryAttributes addObject:supplementary];
         
         for (NSInteger idx = 0; idx < columnCount; idx++) {
-            self.columnHeights[section][idx] = @(top);
+            self.columnHeights[section][idx] = @(self.contentHeight);
         }
         
-        NSLog(@"%f", [self.columnHeights[section][(columnCount-1)] floatValue]);
+        NSLog(@"%f,%f", [self.columnHeights[section][(columnCount-1)] floatValue],self.contentHeight);
     }
 }
 
 //2、设定collectionView的contentsize
 - (CGSize)collectionViewContentSize
 {
-    NSInteger numberOfSections = [self.collectionView numberOfSections];
-    NSUInteger longestColumnIndex = [self longestColumnIndexInSection:numberOfSections-1];
-    
-    CGSize contentSize = self.collectionView.bounds.size;
-    contentSize.height = [[self.columnHeights lastObject][longestColumnIndex] floatValue];
-    NSLog(@"111   %@",NSStringFromCGSize(contentSize));
-    return contentSize;
+    return CGSizeMake(self.collectionView.frame.size.width, self.contentHeight);
 }
 
 //3、返回rect中的所有的元素的布局属性
