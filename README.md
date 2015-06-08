@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/JCCollectionViewWaterfallLayout.svg?style=flat)](http://cocoapods.org/pods/JCCollectionViewWaterfallLayout)
 [![Platform](https://img.shields.io/cocoapods/p/JCCollectionViewWaterfallLayout.svg?style=flat)](http://cocoapods.org/pods/JCCollectionViewWaterfallLayout)
 
-xxx.
+Support multiple section, and can add headerView and footerView.
 
 <img width="320" src="./ScreenShot.png"> 
 

@@ -14,7 +14,7 @@
 #import "JCCollectionFooterView.h"
 #import "JCCollectionViewWaterfallLayout.h"
 
-@interface JCViewController ()<UISearchBarDelegate, JCCollectionViewWaterfallLayoutDelegate>
+@interface JCViewController ()
 
 @property (nonatomic, strong) NSMutableArray *pictures;
 
@@ -72,8 +72,7 @@ static NSString * const reuseCellId = @"cellId";
     [[NSOperationQueue mainQueue] addOperation:operation];
 }
 
-
-#pragma mark -
+#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {

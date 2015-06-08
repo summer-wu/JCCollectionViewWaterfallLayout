@@ -62,17 +62,14 @@
 
 #pragma mark -
 
-//设置一些必要的layout的结构和初始需要的参数
 - (void)prepareLayout
 {
-    self.delegate = (id<JCCollectionViewWaterfallLayoutDelegate>)self.collectionView.delegate;
-    
     self.contentHeight = 0;
     [self.itemAttributes removeAllObjects];
     [self.supplementaryAttributes removeAllObjects];
     
     NSInteger numberOfSections = [self.collectionView numberOfSections];
-
+    
     for (NSInteger section = 0; section < numberOfSections; section++) {
         CGFloat minimumInteritemSpacing = [self minimumInteritemSpacingForSection:section];
         CGFloat minimumLineSpacing = [self minimumLineSpacingForSection:section];
@@ -96,15 +93,15 @@
             self.contentHeight = CGRectGetMaxY(attributes.frame);
         }
         
+        //item
+        NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
+        
         NSMutableArray *columnHeights = [[NSMutableArray alloc] initWithCapacity:columnCount];
         
         for (NSInteger i = 0; i < columnCount; i++) {
             columnHeights[i] = @(self.contentHeight);
         }
-
-        //item
-        NSInteger itemCount = [self.collectionView numberOfItemsInSection:section];
-
+        
         for (NSInteger i = 0; i < itemCount; i++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:section];
             
@@ -117,11 +114,15 @@
             attributes.frame = CGRectMake(x, [columnHeights[columnIndex] floatValue], size.width, size.height);
             
             [self.itemAttributes addObject:attributes];
-           
+            
             columnHeights[columnIndex] = @(CGRectGetMaxY(attributes.frame) + minimumLineSpacing);
         }
         
         self.contentHeight = [[columnHeights valueForKeyPath:@"@max.self"] floatValue];
+        
+        if (itemCount == 0) {
+            self.contentHeight += [UIScreen mainScreen].bounds.size.height;
+        }
         
         //footer
         if (footerHeight > 0) {
@@ -140,13 +141,11 @@
     }
 }
 
-//设置collectionView的contentsize
 - (CGSize)collectionViewContentSize
 {
     return CGSizeMake(self.collectionView.frame.size.width, self.contentHeight);
 }
 
-//返回指定rect中的所有的元素的布局属性
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
     return [self.itemAttributes filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(UICollectionViewLayoutAttributes *evaluatedObject, NSDictionary *bindings) {
@@ -154,7 +153,6 @@
     }]];
 }
 
-//返回对应于indexPath的位置的cell的布局属性
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSInteger index = indexPath.item;
@@ -166,13 +164,11 @@
     return self.itemAttributes[index];
 }
 
-//返回对应于indexPath的位置的追加视图的布局属性
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     return self.supplementaryAttributes[indexPath.section][kind];
 }
 
-//当边界发生改变时，是否重新计算需要的布局信息。
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {
     CGRect oldBounds = self.collectionView.bounds;
@@ -185,6 +181,15 @@
 }
 
 #pragma mark -
+
+- (id<JCCollectionViewWaterfallLayoutDelegate>)delegate
+{
+    if (_delegate == nil) {
+        _delegate =  (id<JCCollectionViewWaterfallLayoutDelegate>)self.collectionView.delegate;
+    }
+    
+    return _delegate;
+}
 
 - (NSInteger)columnCountForSection:(NSInteger)section
 {
