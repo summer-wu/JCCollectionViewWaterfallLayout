@@ -72,7 +72,7 @@ static NSString * const reuseCellId = @"cellId";
     [[NSOperationQueue mainQueue] addOperation:operation];
 }
 
-#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource
+#pragma mark - UICollectionViewDelegate & UICollectionViewDataSource 
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
