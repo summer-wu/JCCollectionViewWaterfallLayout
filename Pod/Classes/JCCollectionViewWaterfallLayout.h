@@ -17,7 +17,7 @@
 
 @interface JCCollectionViewWaterfallLayout : UICollectionViewFlowLayout
 
-@property (nonatomic, assign) NSInteger columnCount; // default 2
+@property (nonatomic, assign) NSInteger columnCount; //default 2
 @property (nonatomic, assign) CGFloat headerHeight;
 @property (nonatomic, assign) CGFloat footerHeight;
 
