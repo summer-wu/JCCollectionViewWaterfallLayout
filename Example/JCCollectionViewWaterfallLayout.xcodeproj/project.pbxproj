@@ -26,6 +26,7 @@
 		F302E1DB1B20542200C5F6D3 /* JCCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F302E1DA1B20542200C5F6D3 /* JCCollectionViewCell.m */; };
 		F302E1DE1B205A6800C5F6D3 /* JCCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = F302E1DD1B205A6800C5F6D3 /* JCCollectionHeaderView.m */; };
 		F302E1E11B205A7C00C5F6D3 /* JCCollectionFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = F302E1E01B205A7C00C5F6D3 /* JCCollectionFooterView.m */; };
+		F38A5A341BCF5C8600433581 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F38A5A331BCF5C8600433581 /* Launch Screen.storyboard */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		F302E1DD1B205A6800C5F6D3 /* JCCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCCollectionHeaderView.m; sourceTree = "<group>"; };
 		F302E1DF1B205A7C00C5F6D3 /* JCCollectionFooterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JCCollectionFooterView.h; sourceTree = "<group>"; };
 		F302E1E01B205A7C00C5F6D3 /* JCCollectionFooterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JCCollectionFooterView.m; sourceTree = "<group>"; };
+		F38A5A331BCF5C8600433581 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		FB186DD118A67E0A498E8E06 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -169,6 +171,7 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F38A5A331BCF5C8600433581 /* Launch Screen.storyboard */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F595195388D20070C39A /* JCCollectionViewWaterfallLayout-Info.plist */,
 				6003F596195388D20070C39A /* InfoPlist.strings */,
@@ -220,6 +223,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				937220089CB3B723161BE7C4 /* Copy Pods Resources */,
+				2EEC5B6CECA7C74FD3603486 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -239,6 +243,7 @@
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
 				7C0D0EF03E5AECB5B7A42738 /* Copy Pods Resources */,
+				586B8188F7DDA1DD5488D04C /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -257,7 +262,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = JC;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = lijingcheng;
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
@@ -291,6 +296,7 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
+				F38A5A341BCF5C8600433581 /* Launch Screen.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,6 +312,36 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2EEC5B6CECA7C74FD3603486 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JCCollectionViewWaterfallLayout_Example/Pods-JCCollectionViewWaterfallLayout_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		586B8188F7DDA1DD5488D04C /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-JCCollectionViewWaterfallLayout_Tests/Pods-JCCollectionViewWaterfallLayout_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6EBB01B0037812803AB09B86 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -438,6 +474,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -502,6 +539,7 @@
 				GCC_PREFIX_HEADER = "JCCollectionViewWaterfallLayout/JCCollectionViewWaterfallLayout-Prefix.pch";
 				INFOPLIST_FILE = "JCCollectionViewWaterfallLayout/JCCollectionViewWaterfallLayout-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -518,6 +556,7 @@
 				GCC_PREFIX_HEADER = "JCCollectionViewWaterfallLayout/JCCollectionViewWaterfallLayout-Prefix.pch";
 				INFOPLIST_FILE = "JCCollectionViewWaterfallLayout/JCCollectionViewWaterfallLayout-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
@@ -541,6 +580,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JCCollectionViewWaterfallLayout_Example.app/JCCollectionViewWaterfallLayout_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -560,6 +600,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JCCollectionViewWaterfallLayout_Example.app/JCCollectionViewWaterfallLayout_Example";
 				WRAPPER_EXTENSION = xctest;

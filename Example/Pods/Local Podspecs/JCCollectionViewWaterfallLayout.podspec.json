@@ -1,7 +1,7 @@
 {
   "name": "JCCollectionViewWaterfallLayout",
   "version": "0.0.1",
-  "summary": "xxx.",
+  "summary": "Support multiple section, and can add headerView and footerView.",
   "homepage": "http://lijingcheng.github.io/",
   "license": "MIT",
   "authors": {
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "AFNetworking": [
-      "~> 2.5.4"
+      "~> 2.6.0"
     ]
   }
 }
