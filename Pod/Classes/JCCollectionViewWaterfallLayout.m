@@ -49,14 +49,16 @@
     self.minimumLineSpacing = 5.0f;
     self.sectionInset = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
     
-    self.columnCount = 2;
     self.headerHeight = 0.0f;
     self.footerHeight = 0.0f;
     self.itemAttributes = [[NSMutableArray alloc] initWithCapacity:10];
     self.supplementaryAttributes = [[NSMutableArray alloc] initWithCapacity:10];
-    
-    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width-self.sectionInset.left-self.sectionInset.right-(self.columnCount-1)*self.minimumInteritemSpacing)/self.columnCount;
-    
+}
+
+- (void)changeItemSizeWithColumnCount:(NSUInteger)columnCount{
+    NSAssert(columnCount>0, @"columnCount must bigger than zero");
+    CGFloat itemWidth = ([UIScreen mainScreen].bounds.size.width-self.sectionInset.left-self.sectionInset.right-(columnCount-1)*self.minimumInteritemSpacing)/columnCount;
+    //itemSize vary with section
     self.itemSize = CGSizeMake(itemWidth, itemWidth);
 }
 
@@ -75,6 +77,7 @@
         CGFloat minimumLineSpacing = [self minimumLineSpacingForSection:section];
         UIEdgeInsets sectionInset = [self sectionInsetForSection:section];
         NSInteger columnCount = [self columnCountForSection:section];
+        [self changeItemSizeWithColumnCount:columnCount];
         CGFloat headerHeight = [self headerHeightForSection:section];
         CGFloat footerHeight = [self footerHeightForSection:section];
         
@@ -197,7 +200,7 @@
         return [self.delegate collectionView:self.collectionView layout:self columnCountForSection:section];
     }
     else {
-        return self.columnCount;
+        return 2;
     }
 }
 

@@ -115,4 +115,13 @@ static NSString * const reuseCellId = @"cellId";
     return cell;
 }
 
+- (NSInteger)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout columnCountForSection:(NSInteger)section{
+    if (0==section) {
+        return 2;
+    }else {
+        return 3;
+    }
+}
+
+
 @end
